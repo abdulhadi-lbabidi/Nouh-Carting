@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use App\MediaLibrary\CategoryPathGenerator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\Image\Enums\Fit;
+use App\MediaLibrary\CategoryPathGenerator;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\MediaLibrary\Support\PathGenerator\PathGeneratorFactory;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\Image\Enums\Fit;
 
 class Category extends Model implements HasMedia
 {

@@ -9,9 +9,6 @@ class ProductService
   public function findAll()
   {
     return Product::with([
-      'variants.color',
-      'variants.size',
-      'variants.images',
       'category'
     ])->get();
   }
