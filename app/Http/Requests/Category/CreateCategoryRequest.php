@@ -32,7 +32,7 @@ class CreateCategoryRequest extends FormRequest
       'description.ar' => ['required', 'string'],
 
       'images'   => ['nullable', 'array'],
-      'images.*' => ['file', 'max:4096', 'mimes:jpeg,jpg,png'],
+      'images.*' => ['image', 'mimes:jpeg,png,jpg,webp', 'max:10240'], // 10MB
     ];
   }
 }

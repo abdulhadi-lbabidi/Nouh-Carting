@@ -22,6 +22,7 @@ class CategoryResource extends JsonResource
       'all_images' => $this->getMedia('categories')->map(function ($media) {
         return $media->getUrl('default');
       }),
+      'created_at' => $this->created_at->format('Y-m-d H:i:s'),
       // 'products' => ProductResource::collection($this->whenLoaded('products')),
     ];
   }

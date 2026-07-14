@@ -8,6 +8,7 @@ use App\Http\Requests\Category\UpdateCategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Services\CategoryService;
+use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
@@ -15,9 +16,13 @@ class CategoryController extends Controller
     private CategoryService $categoryService
   ) {}
 
-  public function index()
+  public function index(Request $request)
   {
-    $categories = $this->categoryService->findAll();
+    $paginate = $request->boolean('paginate', false);
+    $perPage  = $request->input('per_page', 10);
+    $page     = $request->input('page', 1);
+
+    $categories = $this->categoryService->findAll($paginate, $perPage, $page);
 
     return CategoryResource::collection($categories);
   }

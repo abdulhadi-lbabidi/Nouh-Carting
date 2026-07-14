@@ -2,15 +2,31 @@
 
 namespace App\Services;
 
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use App\Models\Size;
 
 
 class SizeService
 {
 
-  public function findAll()
-  {
-    return Size::all();
+  public function findAll(
+    $paginate = false,
+    $perPage = 10,
+    $page = 1,
+    $columns = ["*"],
+  ): LengthAwarePaginator|Collection {
+    $query = Size::query();
+
+    if ($paginate) {
+      return $query->paginate(
+        perPage: $perPage,
+        page: $page,
+        columns: $columns,
+      );
+    }
+
+    return $query->get($columns);
   }
 
   public function createSize(array $data)

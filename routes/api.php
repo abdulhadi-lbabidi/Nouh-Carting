@@ -4,6 +4,10 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\MaterialController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SizeController;
+use App\Http\Controllers\Api\ProductVariantController;
+use App\Http\Controllers\Api\ProductVariantPackageController;
+use App\Http\Controllers\Api\ReviewController;
+use App\Http\Controllers\Api\WishlistController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -12,13 +16,11 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-
 /*
 |--------------------------------------------------------------------------
 | Public API (NO AUTH)
 |--------------------------------------------------------------------------
 */
-
 Route::middleware(['setLocale'])->group(function () {
 
   // Categories
@@ -31,6 +33,18 @@ Route::middleware(['setLocale'])->group(function () {
   Route::get('products/{product}', [ProductController::class, 'show']);
   Route::get('products-sliders', [ProductController::class, 'sliders']);
 
+  // Product Variants
+  Route::get('product-variants', [ProductVariantController::class, 'index']);
+  Route::get('product-variants/{variant}', [ProductVariantController::class, 'show']);
+
+  // Product Variant Packages
+  Route::get('variant-packages', [ProductVariantPackageController::class, 'index']);
+  Route::get('variant-packages/{package}', [ProductVariantPackageController::class, 'show']);
+
+  // Reviews
+  Route::get('reviews', [ReviewController::class, 'index']);
+  Route::get('reviews/{review}', [ReviewController::class, 'show']);
+
   // Attributes
   Route::get('sizes', [SizeController::class, 'index']);
   Route::get('materials', [MaterialController::class, 'index']);
@@ -42,10 +56,18 @@ Route::middleware(['setLocale'])->group(function () {
 | Authenticated User API
 |--------------------------------------------------------------------------
 */
-Route::middleware(['setLocale', 'auth:sanctum'])->group(function () {});
+Route::middleware(['setLocale', 'auth:sanctum'])->group(function () {
 
+  // Wishlist
+  Route::get('wishlist', [WishlistController::class, 'index']);
+  Route::post('wishlist', [WishlistController::class, 'store']);
+  Route::delete('wishlist/{wishlist}', [WishlistController::class, 'destroy']);
 
-
+  // Reviews
+  Route::post('reviews', [ReviewController::class, 'store']);
+  Route::put('reviews/{review}', [ReviewController::class, 'update']);
+  Route::delete('reviews/{review}', [ReviewController::class, 'destroy']);
+});
 
 
 /*
@@ -53,13 +75,20 @@ Route::middleware(['setLocale', 'auth:sanctum'])->group(function () {});
 | Admin API (AUTH + ADMIN)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['setLocale'])->group(function () {
-
+Route::middleware(['setLocale', 'auth:sanctum'])->group(function () {
 
   Route::apiResource('categories', CategoryController::class)
     ->except(['index', 'show']);
 
   Route::apiResource('products', ProductController::class)
+    ->except(['index', 'show']);
+
+  // Product Variants
+  Route::apiResource('product-variants', ProductVariantController::class)
+    ->except(['index', 'show']);
+
+  // Product Variant Packages
+  Route::apiResource('variant-packages', ProductVariantPackageController::class)
     ->except(['index', 'show']);
 
   Route::apiResource('sizes', SizeController::class)

@@ -8,6 +8,7 @@ use App\Http\Requests\Size\UpdateSizeRequest;
 use App\Http\Resources\SizeResource;
 use App\Models\Size;
 use App\Services\SizeService;
+use Illuminate\Http\Request;
 
 class SizeController extends Controller
 {
@@ -15,12 +16,16 @@ class SizeController extends Controller
     private SizeService $sizeService
   ) {}
 
-  public function index()
+  public function index(Request $request)
   {
-    $sizes = $this->sizeService->findAll();
+    $paginate = $request->boolean('paginate', false);
+    $perPage  = $request->input('per_page', 10);
+    $page     = $request->input('page', 1);
+
+    $sizes = $this->sizeService->findAll($paginate, $perPage, $page);
+
     return SizeResource::collection($sizes);
   }
-
   public function store(CreateSizeRequest $request)
   {
     $size = $this->sizeService->createSize($request->validated());

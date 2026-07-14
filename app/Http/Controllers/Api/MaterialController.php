@@ -8,6 +8,7 @@ use App\Http\Requests\material\UpdateMaterialRequest;
 use App\Http\Resources\MaterialResource;
 use App\Models\Material;
 use App\Services\MaterialService;
+use Illuminate\Http\Request;
 
 class MaterialController extends Controller
 {
@@ -15,9 +16,14 @@ class MaterialController extends Controller
     private MaterialService $materialService
   ) {}
 
-  public function index()
+  public function index(Request $request)
   {
-    $materials = $this->materialService->findAll();
+    $paginate = $request->boolean('paginate', false);
+    $perPage  = $request->input('per_page', 10);
+    $page     = $request->input('page', 1);
+
+    $materials = $this->materialService->findAll($paginate, $perPage, $page);
+
     return MaterialResource::collection($materials);
   }
 

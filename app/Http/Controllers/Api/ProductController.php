@@ -8,6 +8,7 @@ use App\Http\Requests\Product\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Services\ProductService;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -16,9 +17,14 @@ class ProductController extends Controller
   ) {}
 
 
-  public function index()
+  public function index(Request $request)
   {
-    $products = $this->productService->findAll();
+    $paginate = $request->boolean('paginate', false);
+    $perPage  = $request->input('per_page', 10);
+    $page     = $request->input('page', 1);
+
+    $products = $this->productService->findAll($paginate, $perPage, $page);
+
     return ProductResource::collection($products);
   }
 

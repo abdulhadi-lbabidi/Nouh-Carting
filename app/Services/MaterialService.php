@@ -2,15 +2,31 @@
 
 namespace App\Services;
 
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use App\Models\Material;
 
 
 class MaterialService
 {
 
-  public function findAll()
-  {
-    return Material::all();
+  public function findAll(
+    $paginate = false,
+    $perPage = 10,
+    $page = 1,
+    $columns = ["*"],
+  ): LengthAwarePaginator|Collection {
+    $query = Material::query();
+
+    if ($paginate) {
+      return $query->paginate(
+        perPage: $perPage,
+        page: $page,
+        columns: $columns,
+      );
+    }
+
+    return $query->get($columns);
   }
 
   public function createMaterial(array $data)
