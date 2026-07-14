@@ -8,7 +8,6 @@ use App\Http\Requests\Category\UpdateCategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Services\CategoryService;
-use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
@@ -28,7 +27,7 @@ class CategoryController extends Controller
     $validated = $request->validated();
     $category = $this->categoryService->createCategory(
       $validated,
-      $request->file('image')
+      $request->file('images') ?? []
     );
     return new CategoryResource($category);
   }
@@ -42,11 +41,16 @@ class CategoryController extends Controller
   public function update(Category $category, UpdateCategoryRequest $request)
   {
     $validated = $request->validated();
+
+    $deletedMediaIds = $request->input('deleted_media_ids', []);
+
     $newCategory = $this->categoryService->updateCategory(
       $category,
       $validated,
-      $request->file('image')
+      $request->file('images'),
+      $deletedMediaIds
     );
+
     return new CategoryResource($newCategory);
   }
 

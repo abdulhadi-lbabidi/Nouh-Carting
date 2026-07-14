@@ -31,6 +31,12 @@ class UpdateCategoryRequest extends FormRequest
       'description.en' => ['sometimes', 'string'],
       'description.ar' => ['sometimes', 'string'],
 
+      'images'   => ['nullable', 'array'],
+      'images.*' => ['file', 'max:4096', 'mimes:jpeg,jpg,png'],
+
+      'deleted_media_ids'   => ['nullable', 'array'],
+      'deleted_media_ids.*' => ['integer', 'exists:media,id'],
+
     ];
   }
 }

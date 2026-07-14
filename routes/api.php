@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\MaterialController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\SizeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,9 +21,6 @@ Route::get('/user', function (Request $request) {
 
 Route::middleware(['setLocale'])->group(function () {
 
-
-
-
   // Categories
   Route::get('categories', [CategoryController::class, 'index']);
   Route::get('categories/{category}', [CategoryController::class, 'show']);
@@ -31,6 +30,10 @@ Route::middleware(['setLocale'])->group(function () {
   Route::get('products/featured', [ProductController::class, 'featured']);
   Route::get('products/{product}', [ProductController::class, 'show']);
   Route::get('products-sliders', [ProductController::class, 'sliders']);
+
+  // Attributes
+  Route::get('sizes', [SizeController::class, 'index']);
+  Route::get('materials', [MaterialController::class, 'index']);
 });
 
 
@@ -50,7 +53,7 @@ Route::middleware(['setLocale', 'auth:sanctum'])->group(function () {});
 | Admin API (AUTH + ADMIN)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['setLocale', 'auth:sanctum'])->group(function () {
+Route::middleware(['setLocale'])->group(function () {
 
 
   Route::apiResource('categories', CategoryController::class)
@@ -58,4 +61,10 @@ Route::middleware(['setLocale', 'auth:sanctum'])->group(function () {
 
   Route::apiResource('products', ProductController::class)
     ->except(['index', 'show']);
+
+  Route::apiResource('sizes', SizeController::class)
+    ->except(['index']);
+
+  Route::apiResource('materials', MaterialController::class)
+    ->except(['index']);
 });

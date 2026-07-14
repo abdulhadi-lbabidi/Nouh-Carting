@@ -5,18 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use App\MediaLibrary\CategoryPathGenerator;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\MediaLibrary\Support\PathGenerator\PathGeneratorFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\Image\Enums\Fit;
 
+
+#[Fillable(['name', 'description', 'category_id'])]
 class Category extends Model implements HasMedia
 {
-
   use HasFactory, InteractsWithMedia;
-
-  protected $fillable = ['name', 'description'];
 
   protected $casts = [
     'name' => 'array',

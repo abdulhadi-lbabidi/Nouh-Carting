@@ -30,6 +30,9 @@ class CreateCategoryRequest extends FormRequest
       'description' => ['required', 'array'],
       'description.en' => ['required', 'string'],
       'description.ar' => ['required', 'string'],
+
+      'images'   => ['nullable', 'array'],
+      'images.*' => ['file', 'max:4096', 'mimes:jpeg,jpg,png'],
     ];
   }
 }

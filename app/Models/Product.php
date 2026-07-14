@@ -2,16 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
+#[Fillable(['name', 'body', 'category_id', 'is_featured'])]
 class Product extends Model
 {
   use HasFactory;
-  protected $fillable = ['name', 'body', 'category_id', 'is_featured'];
-
   public function category()
   {
     return $this->belongsTo(Category::class);
