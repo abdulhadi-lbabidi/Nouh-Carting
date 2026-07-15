@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Package\CreatePackageRequest;
 use App\Http\Requests\Package\UpdatePackageRequest;
-use App\Http\Resources\PackageResource; // تأكد من تعديل الـ Resource ليناسب الموديل الجديد
+use App\Http\Resources\PackageResource;
 use App\Models\Package;
 use App\Services\PackageService;
 use Illuminate\Http\Request;
@@ -14,8 +14,11 @@ class PackageController extends Controller
 {
   public function __construct(
     private PackageService $packageService
-  ) {}
-
+  ) {
+    $this->authorizeResource(Package::class, 'package', [
+      'except' => ['index', 'show']
+    ]);
+  }
   public function index(Request $request)
   {
     $paginate = $request->boolean('paginate', false);

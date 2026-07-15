@@ -31,7 +31,6 @@ class AuthService
       abort(403, 'هذا الحساب معطل، يرجى التواصل مع الإدارة.');
     }
 
-    $user->assignRole('customer');
     $user->tokens()->delete();
     $token = $user->createToken('auth_token')->plainTextToken;
     return $token;

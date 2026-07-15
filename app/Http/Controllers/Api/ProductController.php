@@ -14,8 +14,11 @@ class ProductController extends Controller
 {
   public function __construct(
     private ProductService $productService
-  ) {}
-
+  ) {
+    $this->authorizeResource(Product::class, 'product', [
+      'except' => ['index', 'show']
+    ]);
+  }
 
   public function index(Request $request)
   {

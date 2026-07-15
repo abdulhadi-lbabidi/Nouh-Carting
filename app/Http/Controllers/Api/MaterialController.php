@@ -14,7 +14,11 @@ class MaterialController extends Controller
 {
   public function __construct(
     private MaterialService $materialService
-  ) {}
+  ) {
+    $this->authorizeResource(Material::class, 'material', [
+      'except' => ['index']
+    ]);
+  }
 
   public function index(Request $request)
   {

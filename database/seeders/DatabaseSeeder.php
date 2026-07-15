@@ -18,5 +18,9 @@ class DatabaseSeeder extends Seeder
   {
     Role::findOrCreate('customer', 'api');
     Role::findOrCreate('admin', 'api');
+
+    $this->call([
+      PermissionSeeder::class,
+    ]);
   }
 }

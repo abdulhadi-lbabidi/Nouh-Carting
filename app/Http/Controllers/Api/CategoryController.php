@@ -14,8 +14,11 @@ class CategoryController extends Controller
 {
   public function __construct(
     private CategoryService $categoryService
-  ) {}
-
+  ) {
+    $this->authorizeResource(Category::class, 'category', [
+      'except' => ['index', 'show']
+    ]);
+  }
   public function index(Request $request)
   {
     $paginate = $request->boolean('paginate', false);

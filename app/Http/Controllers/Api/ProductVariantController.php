@@ -14,8 +14,11 @@ class ProductVariantController extends Controller
 {
   public function __construct(
     private ProductVariantService $variantService
-  ) {}
-
+  ) {
+    $this->authorizeResource(ProductVariant::class, 'product_variant', [
+      'except' => ['index', 'show']
+    ]);
+  }
   public function index(Request $request)
   {
     $paginate = $request->boolean('paginate', false);

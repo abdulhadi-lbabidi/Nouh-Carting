@@ -8,6 +8,8 @@ use App\Http\Controllers\Api\SizeController;
 use App\Http\Controllers\Api\ProductVariantController;
 use App\Http\Controllers\Api\PackageController;
 use App\Http\Controllers\Api\ReviewController;
+use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WishlistController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -85,9 +87,17 @@ Route::middleware(['setLocale', 'auth:sanctum'])->group(function () {
 */
 Route::middleware(['setLocale', 'auth:sanctum'])->group(function () {
 
+  // Roles
+  Route::apiResource('roles', RoleController::class);
+
+  // Users
+  Route::apiResource('users', UserController::class);
+
+  // Categories
   Route::apiResource('categories', CategoryController::class)
     ->except(['index', 'show']);
 
+  // Products
   Route::apiResource('products', ProductController::class)
     ->except(['index', 'show']);
 
@@ -99,9 +109,11 @@ Route::middleware(['setLocale', 'auth:sanctum'])->group(function () {
   Route::apiResource('packages', PackageController::class)
     ->except(['index', 'show']);
 
+  // Sizes
   Route::apiResource('sizes', SizeController::class)
     ->except(['index']);
 
+  // Materials
   Route::apiResource('materials', MaterialController::class)
     ->except(['index']);
 });

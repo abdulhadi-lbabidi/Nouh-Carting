@@ -14,8 +14,11 @@ class SizeController extends Controller
 {
   public function __construct(
     private SizeService $sizeService
-  ) {}
-
+  ) {
+    $this->authorizeResource(Size::class, 'size', [
+      'except' => ['index']
+    ]);
+  }
   public function index(Request $request)
   {
     $paginate = $request->boolean('paginate', false);
