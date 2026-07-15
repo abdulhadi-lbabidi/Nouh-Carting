@@ -17,10 +17,10 @@ class DatabaseSeeder extends Seeder
   public function run(): void
   {
     Role::findOrCreate('customer', 'api');
-    Role::findOrCreate('admin', 'api');
 
     $this->call([
       PermissionSeeder::class,
+      AdminSeeder::class
     ]);
   }
 }

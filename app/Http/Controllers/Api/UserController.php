@@ -9,14 +9,13 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
   public function __construct(
     private UserService $userService
-  ) {
-    $this->authorizeResource(User::class, 'user');
-  }
+  ) {}
 
   public function index(Request $request)
   {
@@ -31,6 +30,8 @@ class UserController extends Controller
 
   public function store(CreateUserRequest $request)
   {
+    Gate::authorize('create', User::class);
+
     $validated = $request->validated();
 
     $user = $this->userService->createUser($validated);
@@ -47,6 +48,8 @@ class UserController extends Controller
 
   public function update(User $user, UpdateUserRequest $request)
   {
+    Gate::authorize('update', $user);
+
     $validated = $request->validated();
 
     $updatedUser = $this->userService->updateUser($user, $validated);
@@ -56,6 +59,8 @@ class UserController extends Controller
 
   public function destroy(User $user)
   {
+    Gate::authorize('delete', $user);
+
     $this->userService->deleteUser($user);
 
     return response()->json([

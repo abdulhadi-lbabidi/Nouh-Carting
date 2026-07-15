@@ -9,16 +9,15 @@ use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Services\CategoryService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+
 
 class CategoryController extends Controller
 {
   public function __construct(
     private CategoryService $categoryService
-  ) {
-    $this->authorizeResource(Category::class, 'category', [
-      'except' => ['index', 'show']
-    ]);
-  }
+  ) {}
+
   public function index(Request $request)
   {
     $paginate = $request->boolean('paginate', false);
@@ -32,6 +31,8 @@ class CategoryController extends Controller
 
   public function store(CreateCategoryRequest $request)
   {
+    Gate::authorize('create', Category::class);
+
     $validated = $request->validated();
     $category = $this->categoryService->createCategory(
       $validated,
@@ -48,6 +49,8 @@ class CategoryController extends Controller
 
   public function update(Category $category, UpdateCategoryRequest $request)
   {
+    Gate::authorize('update', $category);
+
     $validated = $request->validated();
 
     $deletedMediaIds = $request->input('deleted_media_ids', []);
@@ -64,6 +67,8 @@ class CategoryController extends Controller
 
   public function destroy(Category $category)
   {
+    Gate::authorize('delete', $category);
+
     $this->categoryService->deleteCategory($category);
 
     return response()->json([

@@ -9,16 +9,13 @@ use App\Http\Resources\PackageResource;
 use App\Models\Package;
 use App\Services\PackageService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class PackageController extends Controller
 {
   public function __construct(
     private PackageService $packageService
-  ) {
-    $this->authorizeResource(Package::class, 'package', [
-      'except' => ['index', 'show']
-    ]);
-  }
+  ) {}
   public function index(Request $request)
   {
     $paginate = $request->boolean('paginate', false);
@@ -32,6 +29,8 @@ class PackageController extends Controller
 
   public function store(CreatePackageRequest $request)
   {
+    Gate::authorize('create', Package::class);
+
     $validated = $request->validated();
     $package = $this->packageService->createPackage($validated);
 
@@ -45,6 +44,8 @@ class PackageController extends Controller
 
   public function update(Package $package, UpdatePackageRequest $request)
   {
+    Gate::authorize('update', $package);
+
     $validated = $request->validated();
     $updatedPackage = $this->packageService->updatePackage($package, $validated);
 
@@ -53,6 +54,8 @@ class PackageController extends Controller
 
   public function destroy(Package $package)
   {
+    Gate::authorize('delete', $package);
+
     $this->packageService->deletePackage($package);
 
     return response()->json([

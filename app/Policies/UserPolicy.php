@@ -24,11 +24,19 @@ class UserPolicy
   }
 
 
-  public function create(User $user): bool
+  // public function create(User $user): bool
+  // {
+  //   return $user->hasPermissionTo('create_user');
+  // }
+
+  public function create(?User $user): bool
   {
+    if ($user === null) {
+      return true;
+    }
+
     return $user->hasPermissionTo('create_user');
   }
-
 
   public function update(User $user, User $model): bool
   {

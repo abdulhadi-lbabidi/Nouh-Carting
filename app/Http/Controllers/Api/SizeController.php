@@ -9,16 +9,13 @@ use App\Http\Resources\SizeResource;
 use App\Models\Size;
 use App\Services\SizeService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class SizeController extends Controller
 {
   public function __construct(
     private SizeService $sizeService
-  ) {
-    $this->authorizeResource(Size::class, 'size', [
-      'except' => ['index']
-    ]);
-  }
+  ) {}
   public function index(Request $request)
   {
     $paginate = $request->boolean('paginate', false);
@@ -31,6 +28,8 @@ class SizeController extends Controller
   }
   public function store(CreateSizeRequest $request)
   {
+    Gate::authorize('create', Size::class);
+
     $size = $this->sizeService->createSize($request->validated());
     return new SizeResource($size);
   }
@@ -42,11 +41,15 @@ class SizeController extends Controller
 
   public function update(Size $size, UpdateSizeRequest $request)
   {
+    Gate::authorize('update', $size);
+
     $newSize = $this->sizeService->updateSize($size, $request->validated());
     return new SizeResource($newSize);
   }
   public function destroy(Size $size)
   {
+    Gate::authorize('delete', $size);
+
     $size = $this->sizeService->deleteSize($size);
     return response()->json(['message' => 'Size deleted successfully']);
   }

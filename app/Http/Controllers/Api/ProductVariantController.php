@@ -9,16 +9,13 @@ use App\Http\Resources\ProductVariantResource;
 use App\Models\ProductVariant;
 use App\Services\ProductVariantService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ProductVariantController extends Controller
 {
   public function __construct(
     private ProductVariantService $variantService
-  ) {
-    $this->authorizeResource(ProductVariant::class, 'product_variant', [
-      'except' => ['index', 'show']
-    ]);
-  }
+  ) {}
   public function index(Request $request)
   {
     $paginate = $request->boolean('paginate', false);
@@ -32,6 +29,8 @@ class ProductVariantController extends Controller
 
   public function store(CreateProductVariantRequest $request)
   {
+    Gate::authorize('create', ProductVariant::class);
+
     $validated = $request->validated();
 
     $variant = $this->variantService->createVariant(
@@ -49,6 +48,8 @@ class ProductVariantController extends Controller
 
   public function update(ProductVariant $product_variant, UpdateProductVariantRequest $request)
   {
+    Gate::authorize('update', $product_variant);
+
     $validated = $request->validated();
     $deletedMediaIds = $request->input('deleted_media_ids', []);
 
@@ -64,6 +65,8 @@ class ProductVariantController extends Controller
 
   public function destroy(ProductVariant $product_variant)
   {
+    Gate::authorize('delete', $product_variant);
+
     $this->variantService->deleteVariant($product_variant);
 
     return response()->json([

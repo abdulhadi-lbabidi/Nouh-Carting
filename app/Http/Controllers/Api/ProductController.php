@@ -9,16 +9,13 @@ use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ProductController extends Controller
 {
   public function __construct(
     private ProductService $productService
-  ) {
-    $this->authorizeResource(Product::class, 'product', [
-      'except' => ['index', 'show']
-    ]);
-  }
+  ) {}
 
   public function index(Request $request)
   {
@@ -39,6 +36,8 @@ class ProductController extends Controller
 
   public function store(CreateProductRequest $request)
   {
+    Gate::authorize('create', Product::class);
+
     $validated = $request->validated();
     $product = $this->productService->createProduct(
       $validated,
@@ -55,6 +54,8 @@ class ProductController extends Controller
 
   public function update(Product $product, UpdateProductRequest $request)
   {
+    Gate::authorize('update', $product);
+
     $validated = $request->validated();
 
     $newProduct = $this->productService->updateProduct(
@@ -66,6 +67,8 @@ class ProductController extends Controller
   }
   public function destroy(Product $product)
   {
+    Gate::authorize('delete', $product);
+
     $product = $this->productService->deleteProduct($product);
     return response()->json(['message' => 'Product deleted successfully']);
   }

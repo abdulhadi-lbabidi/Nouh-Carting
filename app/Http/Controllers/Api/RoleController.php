@@ -9,6 +9,7 @@ use App\Http\Resources\RoleResource;
 use App\Models\Role;
 use App\Services\RoleService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class RoleController extends Controller
 {
@@ -29,6 +30,8 @@ class RoleController extends Controller
 
   public function store(CreateRoleRequest $request)
   {
+    Gate::authorize('create', Role::class);
+
     $validated = $request->validated();
     $role = $this->roleService->createRole($validated);
 
@@ -44,6 +47,8 @@ class RoleController extends Controller
 
   public function update(Role $role, UpdateRoleRequest $request)
   {
+    Gate::authorize('update', $role);
+
     $validated = $request->validated();
     $updatedRole = $this->roleService->updateRole($role, $validated);
 
@@ -52,6 +57,8 @@ class RoleController extends Controller
 
   public function destroy(Role $role)
   {
+    Gate::authorize('delete', $role);
+
     $this->roleService->deleteRole($role);
 
     return response()->json([
