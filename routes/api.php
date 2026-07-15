@@ -1,11 +1,12 @@
 <?php
 
+use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\MaterialController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SizeController;
 use App\Http\Controllers\Api\ProductVariantController;
-use App\Http\Controllers\Api\ProductVariantPackageController;
+use App\Http\Controllers\Api\PackageController;
 use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\WishlistController;
 use Illuminate\Http\Request;
@@ -23,6 +24,10 @@ Route::get('/user', function (Request $request) {
 */
 Route::middleware(['setLocale'])->group(function () {
 
+  // Auth
+  Route::post('register', [AuthController::class, 'register']);
+  Route::post('login', [AuthController::class, 'login']);
+
   // Categories
   Route::get('categories', [CategoryController::class, 'index']);
   Route::get('categories/{category}', [CategoryController::class, 'show']);
@@ -38,8 +43,8 @@ Route::middleware(['setLocale'])->group(function () {
   Route::get('product-variants/{variant}', [ProductVariantController::class, 'show']);
 
   // Product Variant Packages
-  Route::get('variant-packages', [ProductVariantPackageController::class, 'index']);
-  Route::get('variant-packages/{package}', [ProductVariantPackageController::class, 'show']);
+  Route::get('packages', [PackageController::class, 'index']);
+  Route::get('packages/{package}', [PackageController::class, 'show']);
 
   // Reviews
   Route::get('reviews', [ReviewController::class, 'index']);
@@ -57,6 +62,9 @@ Route::middleware(['setLocale'])->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['setLocale', 'auth:sanctum'])->group(function () {
+  // User
+  Route::get('me', [AuthController::class, 'me']);
+  Route::put('profile', [AuthController::class, 'updateProfile']);
 
   // Wishlist
   Route::get('wishlist', [WishlistController::class, 'index']);
@@ -88,7 +96,7 @@ Route::middleware(['setLocale', 'auth:sanctum'])->group(function () {
     ->except(['index', 'show']);
 
   // Product Variant Packages
-  Route::apiResource('variant-packages', ProductVariantPackageController::class)
+  Route::apiResource('packages', PackageController::class)
     ->except(['index', 'show']);
 
   Route::apiResource('sizes', SizeController::class)

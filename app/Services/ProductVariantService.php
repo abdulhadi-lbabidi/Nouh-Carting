@@ -48,18 +48,19 @@ class ProductVariantService
   public function createVariant(array $data, $imageFiles = null): ProductVariant
   {
     return DB::transaction(function () use ($data, $imageFiles) {
-      // توليد التلقائي للبيانات الفريدة
       $data['sku'] = ProductVariant::generateUniqueSku();
       $data['barcode'] = ProductVariant::generateUniqueBarcode();
 
       $variant = ProductVariant::create($data);
 
-      // حفظ الـ Packages إن وجدت
       if (!empty($data['packages'])) {
-        $variant->packages()->createMany($data['packages']);
+        $syncData = [];
+        foreach ($data['packages'] as $package) {
+          $syncData[$package['package_id']] = ['quantity' => $package['quantity']];
+        }
+        $variant->packages()->sync($syncData);
       }
 
-      // رفع الصور
       if ($imageFiles) {
         $this->attachMedia($variant, $imageFiles);
       }
@@ -73,15 +74,14 @@ class ProductVariantService
     return DB::transaction(function () use ($variant, $data, $imageFiles, $deletedMediaIds) {
       $variant->update($data);
 
-      // تحديث الـ Packages (حذف القديم وإضافة الجديد في حال تم إرسالها)
       if (isset($data['packages'])) {
-        $variant->packages()->delete();
-        if (!empty($data['packages'])) {
-          $variant->packages()->createMany($data['packages']);
+        $syncData = [];
+        foreach ($data['packages'] as $package) {
+          $syncData[$package['package_id']] = ['quantity' => $package['quantity']];
         }
+        $variant->packages()->sync($syncData);
       }
 
-      // حذف الصور المحددة في التعديل
       if (!empty($deletedMediaIds)) {
         $mediaItems = $variant->media()->whereIn('id', $deletedMediaIds)->get();
         foreach ($mediaItems as $media) {
@@ -89,7 +89,6 @@ class ProductVariantService
         }
       }
 
-      // إضافة الصور الجديدة
       if ($imageFiles) {
         $this->attachMedia($variant, $imageFiles);
       }
@@ -101,8 +100,7 @@ class ProductVariantService
   public function deleteVariant(ProductVariant $variant): ?bool
   {
     return DB::transaction(function () use ($variant) {
-      // حزم الـ Spatie تحذف ملفات الـ media تلقائياً عند حذف الـ Model المرتبط بها
-      $variant->packages()->delete();
+      $variant->packages()->detach();
       return $variant->delete();
     });
   }

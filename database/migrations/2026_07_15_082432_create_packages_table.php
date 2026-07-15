@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Package;
 use App\Models\ProductVariant;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -12,12 +13,19 @@ return new class extends Migration
    */
   public function up(): void
   {
-    Schema::create('product_variant_packages', function (Blueprint $table) {
+    Schema::create('packages', function (Blueprint $table) {
+      $table->id();
+      $table->json('name')->nullable();
+      $table->decimal('price', 10, 2);
+      $table->timestamps();
+    });
+
+    Schema::create('package_product_variant', function (Blueprint $table) {
       $table->id();
       $table->foreignIdFor(ProductVariant::class)->constrained()->cascadeOnDelete();
+      $table->foreignIdFor(Package::class)->constrained()->cascadeOnDelete();
       $table->integer('quantity');
-      $table->decimal('price', 10, 2);
-      $table->unique(['product_variant_id', 'quantity']);
+
       $table->timestamps();
     });
   }
@@ -27,6 +35,7 @@ return new class extends Migration
    */
   public function down(): void
   {
-    Schema::dropIfExists('product_variant_packages');
+    Schema::dropIfExists('package_product_variant');
+    Schema::dropIfExists('packages');
   }
 };

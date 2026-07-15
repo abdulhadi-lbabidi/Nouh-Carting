@@ -39,18 +39,18 @@ class ProductVariantController extends Controller
     return new ProductVariantResource($variant);
   }
 
-  public function show(ProductVariant $variant)
+  public function show(ProductVariant $product_variant)
   {
-    return new ProductVariantResource($this->variantService->findOne($variant));
+    return new ProductVariantResource($this->variantService->findOne($product_variant));
   }
 
-  public function update(ProductVariant $variant, UpdateProductVariantRequest $request)
+  public function update(ProductVariant $product_variant, UpdateProductVariantRequest $request)
   {
     $validated = $request->validated();
     $deletedMediaIds = $request->input('deleted_media_ids', []);
 
     $updatedVariant = $this->variantService->updateVariant(
-      $variant,
+      $product_variant,
       $validated,
       $request->file('images'),
       $deletedMediaIds
@@ -59,9 +59,9 @@ class ProductVariantController extends Controller
     return new ProductVariantResource($updatedVariant);
   }
 
-  public function destroy(ProductVariant $variant)
+  public function destroy(ProductVariant $product_variant)
   {
-    $this->variantService->deleteVariant($variant);
+    $this->variantService->deleteVariant($product_variant);
 
     return response()->json([
       'message' => 'Variant deleted successfully'

@@ -33,8 +33,8 @@ class CreateProductVariantRequest extends FormRequest
       'images.*' => ['image', 'mimes:jpeg,png,jpg,webp', 'max:10240'], // 10MB
 
       'packages' => ['nullable', 'array'],
-      'packages.*.quantity' => ['required_with:packages', 'integer', 'min:1'],
-      'packages.*.price' => ['required_with:packages', 'numeric', 'min:0'],
+      'packages.*.package_id' => ['required_with:packages', 'exists:packages,id'],
+      'packages.*.quantity'   => ['required_with:packages', 'integer', 'min:1'],
     ];
   }
 }

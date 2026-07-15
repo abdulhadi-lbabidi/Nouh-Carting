@@ -15,8 +15,8 @@ return new class extends Migration
     Schema::create('products', function (Blueprint $table) {
       $table->id();
       $table->foreignIdFor(Category::class)->constrained()->cascadeOnDelete();
-      $table->string('name');
-      $table->text('body');
+      $table->json('name');
+      $table->json('body');
       $table->boolean('is_featured')->default(false);
       $table->timestamps();
     });

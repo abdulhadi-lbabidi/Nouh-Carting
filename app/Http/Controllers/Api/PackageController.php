@@ -1,0 +1,59 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Package\CreatePackageRequest;
+use App\Http\Requests\Package\UpdatePackageRequest;
+use App\Http\Resources\PackageResource; // تأكد من تعديل الـ Resource ليناسب الموديل الجديد
+use App\Models\Package;
+use App\Services\PackageService;
+use Illuminate\Http\Request;
+
+class PackageController extends Controller
+{
+  public function __construct(
+    private PackageService $packageService
+  ) {}
+
+  public function index(Request $request)
+  {
+    $paginate = $request->boolean('paginate', false);
+    $perPage  = $request->input('per_page', 10);
+    $page     = $request->input('page', 1);
+
+    $packages = $this->packageService->findAll($paginate, $perPage, $page);
+
+    return PackageResource::collection($packages);
+  }
+
+  public function store(CreatePackageRequest $request)
+  {
+    $validated = $request->validated();
+    $package = $this->packageService->createPackage($validated);
+
+    return new PackageResource($package);
+  }
+
+  public function show(Package $package)
+  {
+    return new PackageResource($this->packageService->findOne($package));
+  }
+
+  public function update(Package $package, UpdatePackageRequest $request)
+  {
+    $validated = $request->validated();
+    $updatedPackage = $this->packageService->updatePackage($package, $validated);
+
+    return new PackageResource($updatedPackage);
+  }
+
+  public function destroy(Package $package)
+  {
+    $this->packageService->deletePackage($package);
+
+    return response()->json([
+      'message' => 'Package deleted successfully'
+    ], 200);
+  }
+}

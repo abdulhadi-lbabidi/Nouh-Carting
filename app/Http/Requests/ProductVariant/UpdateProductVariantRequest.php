@@ -36,8 +36,8 @@ class UpdateProductVariantRequest extends FormRequest
       'deleted_media_ids.*' => ['integer', 'exists:media,id'],
 
       'packages' => ['nullable', 'array'],
-      'packages.*.quantity' => ['required_with:packages', 'integer', 'min:1'],
-      'packages.*.price' => ['required_with:packages', 'numeric', 'min:0'],
+      'packages.*.package_id' => ['required_with:packages', 'exists:packages,id'],
+      'packages.*.quantity'   => ['required_with:packages', 'integer', 'min:1'],
     ];
   }
 }

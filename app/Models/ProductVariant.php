@@ -77,9 +77,10 @@ class ProductVariant extends Model implements HasMedia
   */
   public function packages()
   {
-    return $this->hasMany(ProductVariantPackage::class, 'product_variant_id');
+    return $this->belongsToMany(Package::class, 'package_product_variant')
+      ->withPivot('quantity')
+      ->withTimestamps();
   }
-
   public function product()
   {
     return $this->belongsTo(Product::class);
