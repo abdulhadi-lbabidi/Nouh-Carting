@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CheckoutController;
 use App\Http\Controllers\Api\MaterialController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SizeController;
@@ -85,6 +86,10 @@ Route::middleware(['setLocale', 'auth:sanctum'])->group(function () {
   Route::put('/cart/{id}', [CartController::class, 'update']);
   Route::delete('/cart/{id}', [CartController::class, 'destroy']);
   Route::delete('/cart-clear', [CartController::class, 'clear']);
+
+
+  // Checkout & Orders
+  Route::apiResource('checkouts', CheckoutController::class);
 });
 
 

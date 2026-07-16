@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\CreateUserRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\UpdateProfileRequest;
+use App\Http\Resources\UserResource;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -35,9 +36,9 @@ class AuthController extends Controller
   public function me()
   {
     $user = Auth::user();
-    return response()->json([
-      'user' => $user,
-    ], 200);
+
+    $user->loadMissing('roles');
+    return new UserResource($user);
   }
 
   public function updateProfile(UpdateProfileRequest $request)
