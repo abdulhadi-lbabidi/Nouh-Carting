@@ -50,6 +50,15 @@ class PermissionSeeder extends Seeder
         'ar' => 'قائمة الأمنيات',
         'en' => 'Wishlists',
       ],
+
+      'role' => [
+        'ar' => 'الأدوار',
+        'en' => 'Roles',
+      ],
+      'permission' => [
+        'ar' => 'الصلاحيات',
+        'en' => 'Permissions',
+      ],
     ];
 
     $actions = [
