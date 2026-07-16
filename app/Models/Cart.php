@@ -13,8 +13,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Cart extends Model
 {
 
-  public function items(): HasMany
+  public function cartItems()
   {
-    return $this->hasMany(CartItem::class);
+    return $this->hasMany(CartItem::class, 'cart_id');
   }
 }

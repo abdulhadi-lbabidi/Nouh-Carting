@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WishlistController;
+use App\Http\Controllers\Api\OrderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -90,6 +91,8 @@ Route::middleware(['setLocale', 'auth:sanctum'])->group(function () {
 
   // Checkout & Orders
   Route::apiResource('checkouts', CheckoutController::class);
+
+  Route::apiResource('orders', OrderController::class);
 });
 
 
