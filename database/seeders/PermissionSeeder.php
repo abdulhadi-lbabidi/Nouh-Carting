@@ -71,12 +71,6 @@ class PermissionSeeder extends Seeder
       ],
     ];
 
-
-
-
-
-
-
     $guardName = 'api';
 
     foreach ($resources as $resource => $resourceTranslations) {

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\MaterialController;
 use App\Http\Controllers\Api\ProductController;
@@ -77,6 +78,13 @@ Route::middleware(['setLocale', 'auth:sanctum'])->group(function () {
   Route::post('reviews', [ReviewController::class, 'store']);
   Route::put('reviews/{review}', [ReviewController::class, 'update']);
   Route::delete('reviews/{review}', [ReviewController::class, 'destroy']);
+
+  // Cart
+  Route::get('/cart', [CartController::class, 'index']);
+  Route::post('/cart', [CartController::class, 'store']);
+  Route::put('/cart/{id}', [CartController::class, 'update']);
+  Route::delete('/cart/{id}', [CartController::class, 'destroy']);
+  Route::delete('/cart-clear', [CartController::class, 'clear']);
 });
 
 
