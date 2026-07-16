@@ -15,7 +15,7 @@ class RoleService
     array $columns = ["*"]
   ): LengthAwarePaginator|Collection {
 
-    $query = Role::with(['permissions']);
+    $query = Role::query();
 
     if ($paginate) {
       return $query->paginate(

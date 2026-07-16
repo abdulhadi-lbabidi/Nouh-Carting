@@ -17,7 +17,7 @@ class UserService
     $columns = ["*"],
   ): LengthAwarePaginator|Collection {
 
-    $query = User::with(['roles.permissions']);
+    $query = User::with(['roles']);
 
     if ($paginate) {
       return $query->paginate(
