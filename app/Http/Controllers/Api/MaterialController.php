@@ -39,7 +39,7 @@ class MaterialController extends Controller
   public function show(Material $material)
   {
 
-    return $material;
+    return new MaterialResource($material);
   }
 
   public function update(Material $material, UpdateMaterialRequest $request)
@@ -53,7 +53,14 @@ class MaterialController extends Controller
   {
     Gate::authorize('delete', $material);
 
-    $material = $this->materialService->deleteMaterial($material);
-    return response()->json(['message' => 'Material deleted successfully']);
+    if ($material->productVariants()->exists()) {
+      return response()->json([
+        'message' => 'Cannot delete this material because it is currently linked to product variants. Remove or update those variants first.'
+      ], 422);
+    }
+    $this->materialService->deleteMaterial($material);
+    return response()->json([
+      'message' => 'Material deleted successfully'
+    ], 200);
   }
 }

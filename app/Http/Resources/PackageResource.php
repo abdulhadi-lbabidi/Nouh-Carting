@@ -9,9 +9,11 @@ class PackageResource extends JsonResource
 {
   public function toArray(Request $request): array
   {
+    $allLanguages = filter_var($request->query('all_languages'), FILTER_VALIDATE_BOOLEAN);
+
     return [
       'id'    => $this->id,
-      'name' => $this->translated_name,
+      'name' => $allLanguages ? $this->name : $this->translated_name,
       'price' => $this->price,
 
       'quantity' => $this->whenPivotLoaded('package_product_variant', function () {

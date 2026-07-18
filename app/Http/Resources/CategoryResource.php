@@ -14,16 +14,20 @@ class CategoryResource extends JsonResource
    */
   public function toArray(Request $request): array
   {
+    $allLanguages = filter_var($request->query('all_languages'), FILTER_VALIDATE_BOOLEAN);
+
     return [
       'id' => $this->id,
-      'name' => $this->translated_name,
-      'description' => $this->translated_description,
-      'image' => $this->getFirstMediaUrl('categories', 'default'),
+
+      'name' => $allLanguages ? $this->name : $this->translated_name,
+      'description' => $allLanguages ? $this->description : $this->translated_description,
+
+      'image' => $this->getFirstMediaUrl('categories', 'default') ?: null,
       'all_images' => $this->getMedia('categories')->map(function ($media) {
         return $media->getUrl('default');
-      }),
-      'created_at' => $this->created_at->format('Y-m-d H:i:s'),
-      // 'products' => ProductResource::collection($this->whenLoaded('products')),
+      })->values(),
+
+      'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
     ];
   }
 }

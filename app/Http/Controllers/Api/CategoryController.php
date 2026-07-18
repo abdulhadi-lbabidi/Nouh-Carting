@@ -44,9 +44,10 @@ class CategoryController extends Controller
 
   public function show(Category $category)
   {
-    return new CategoryResource($category);
-  }
+    $categoryWithRelations = $this->categoryService->findOne($category);
 
+    return new CategoryResource($categoryWithRelations);
+  }
   public function update(Category $category, UpdateCategoryRequest $request)
   {
     Gate::authorize('update', $category);

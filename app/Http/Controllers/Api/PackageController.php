@@ -56,6 +56,12 @@ class PackageController extends Controller
   {
     Gate::authorize('delete', $package);
 
+    if ($package->variants()->exists()) {
+      return response()->json([
+        'message' => 'Cannot delete this package because it is currently linked to product variants. Detach it from the products first.'
+      ], 422);
+    }
+
     $this->packageService->deletePackage($package);
 
     return response()->json([

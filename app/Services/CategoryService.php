@@ -39,11 +39,15 @@ class CategoryService
     return $query->get($columns);
   }
 
-  public function findOne(Category $category)
+  public function findOne(Category $category): Category
   {
-    return $category->load(['media']);
+    return $category->load([
+      'media',
+      'products.variants.size',
+      'products.variants.material',
+      'products.variants.media'
+    ]);
   }
-
   public function createCategory(array $data, $imageFiles = null)
   {
     $category = Category::create($data);

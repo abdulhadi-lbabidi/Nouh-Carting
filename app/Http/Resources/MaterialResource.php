@@ -14,10 +14,14 @@ class MaterialResource extends JsonResource
    */
   public function toArray(Request $request): array
   {
+    $allLanguages = filter_var($request->query('all_languages'), FILTER_VALIDATE_BOOLEAN);
+
     return [
       'id' => $this->id,
-      'material' => $this->translated_material,
-      'created_at' => $this->created_at->format('Y-m-d H:i:s'),
+
+      'material' => $allLanguages ? $this->material : $this->translated_material,
+
+      'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
     ];
   }
 }

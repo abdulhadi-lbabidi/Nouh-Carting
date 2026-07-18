@@ -50,7 +50,16 @@ class SizeController extends Controller
   {
     Gate::authorize('delete', $size);
 
-    $size = $this->sizeService->deleteSize($size);
-    return response()->json(['message' => 'Size deleted successfully']);
+    if ($size->productVariants()->exists()) {
+      return response()->json([
+        'message' => 'Cannot delete this size because it is currently linked to product variants. Remove or update those variants first.'
+      ], 422);
+    }
+
+    $this->sizeService->deleteSize($size);
+
+    return response()->json([
+      'message' => 'Size deleted successfully'
+    ], 200);
   }
 }

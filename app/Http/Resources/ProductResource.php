@@ -26,6 +26,7 @@ class ProductResource extends JsonResource
     // ),
     // ];
 
+    $allLanguages = filter_var($request->query('all_languages'), FILTER_VALIDATE_BOOLEAN);
 
     $availableOptions = $this->variants->groupBy('material_id')->map(function ($materialGroup) {
       $material = $materialGroup->first()->material;
@@ -68,8 +69,10 @@ class ProductResource extends JsonResource
 
     return [
       'id'          => $this->id,
-      'name'        => $this->translated_name,
-      'body'        => $this->translated_body,
+      'name' => $allLanguages ? $this->name : $this->translated_name,
+      'body' => $allLanguages ? $this->body : $this->translated_body,
+
+
       'is_featured' => $this->is_featured,
 
       'image' => $defaultVariant ? $defaultVariant->getFirstMediaUrl('variants', 'default') ?: null : null,
