@@ -38,9 +38,10 @@ class ProductVariantResource extends JsonResource
       'packages' => $this->whenLoaded('packages', function () {
         return $this->packages->map(function ($package) {
           return [
-            'id' => $package->id,
-            'quantity' => $package->quantity,
-            'price' => $package->price,
+            'id'       => $package->id,
+            'name'     => $package->translated_name,
+            'price'    => $package->price,
+            'quantity' => $package->pivot ? $package->pivot->quantity : null,
           ];
         });
       }),
@@ -56,7 +57,6 @@ class ProductVariantResource extends JsonResource
       'created_at' => $this->created_at->format('Y-m-d H:i:s'),
 
 
-      // حسابات التقييمات التلقائية من العلاقة
       'reviews_avg' => $this->reviews_avg_rating ?? $this->reviews()->avg('rating') ?? 0,
       'reviews_count' => $this->reviews_count ?? $this->reviews()->count(),
     ];
