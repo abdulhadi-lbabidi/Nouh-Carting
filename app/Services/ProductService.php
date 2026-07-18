@@ -70,12 +70,16 @@ class ProductService
   }
   public function findFeatured()
   {
-    return Product::with('category')
+    return Product::with([
+      'category',
+      'variants.size',
+      'variants.material',
+      'variants.media'
+    ])
       ->where('is_featured', true)
       ->latest()
       ->get();
   }
-
   public function createProduct(array $data)
   {
     return Product::create($data);
@@ -83,9 +87,14 @@ class ProductService
 
   public function findOne(Product $product)
   {
-    return $product;
+    return $product->load([
+      'category',
+      'variants.size',
+      'variants.material',
+      'variants.packages',
+      'variants.media'
+    ]);
   }
-
   public function updateProduct(Product $product, array $data)
   {
     $product->update($data);

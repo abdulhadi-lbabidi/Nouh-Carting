@@ -90,7 +90,11 @@ class OrderService
         'status' => 'active',
       ]);
 
-      return $order->load(['orderItems.productVariant.product', 'checkout']);
+      return $order->load([
+        'orderItems.productVariant.product',
+        'checkout.user',
+        'checkout.cart'
+      ]);
     });
   }
 

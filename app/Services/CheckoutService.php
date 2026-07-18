@@ -18,9 +18,9 @@ class CheckoutService
   ): LengthAwarePaginator|Collection {
     $query = Checkout::with([
       'user',
-      'cart.items.productVariant.product',
-      'cart.items.productVariant.size',
-      'cart.items.productVariant.material'
+      'cart.cartItems.productVariant.product',
+      'cart.cartItems.productVariant.size',
+      'cart.cartItems.productVariant.material'
     ]);
 
     if ($userId) {

@@ -28,6 +28,8 @@ class CreateProductVariantRequest extends FormRequest
       'price' => ['required', 'numeric', 'min:0'],
       'discount' => ['nullable', 'numeric', 'min:0'],
       'stock_quantity' => ['required', 'integer', 'min:0'],
+      'barcode' => ['nullable', 'string', 'unique:product_variants,barcode'],
+      'sku' => ['nullable', 'string', 'unique:product_variants,sku'],
 
       'images' => ['nullable', 'array'],
       'images.*' => ['image', 'mimes:jpeg,png,jpg,webp', 'max:10240'], // 10MB

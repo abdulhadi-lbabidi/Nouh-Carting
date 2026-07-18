@@ -48,8 +48,7 @@ class ProductVariantService
   public function createVariant(array $data, $imageFiles = null): ProductVariant
   {
     return DB::transaction(function () use ($data, $imageFiles) {
-      $data['sku'] = ProductVariant::generateUniqueSku();
-      $data['barcode'] = ProductVariant::generateUniqueBarcode();
+
 
       $variant = ProductVariant::create($data);
 

@@ -29,6 +29,9 @@ class UpdateProductVariantRequest extends FormRequest
       'discount' => ['sometimes', 'numeric', 'min:0'],
       'stock_quantity' => ['sometimes', 'integer', 'min:0'],
 
+      'barcode' => ['sometimes', 'string', 'unique:product_variants,barcode'],
+      'sku' => ['sometimes', 'string', 'unique:product_variants,sku'],
+
       'images' => ['nullable', 'array'],
       'images.*' => ['image', 'mimes:jpeg,png,jpg,webp', 'max:10240'], // 10MB
 
