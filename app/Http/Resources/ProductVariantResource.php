@@ -52,8 +52,10 @@ class ProductVariantResource extends JsonResource
       'price' => $this->price,
       'discount' => $this->discount,
       'final_price' => $this->final_price,
-      'current_size' => $this->size ? $this->size->size : null,
-      'current_material' => $this->material ? ($allLanguages ? $this->material->material : $this->material->translated_material) : null,
+      'current_size'     => $this->size ? new SizeResource($this->size) : null,
+
+      'current_material' => $this->material ? new MaterialResource($this->material) : null,
+
       'stock_quantity' => $this->stock_quantity,
       'sku' => $this->sku,
       'barcode' => $this->barcode,

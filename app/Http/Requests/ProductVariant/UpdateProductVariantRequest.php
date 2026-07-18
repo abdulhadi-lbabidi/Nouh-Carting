@@ -3,6 +3,7 @@
 namespace App\Http\Requests\ProductVariant;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateProductVariantRequest extends FormRequest
 {
@@ -21,6 +22,8 @@ class UpdateProductVariantRequest extends FormRequest
    */
   public function rules(): array
   {
+    $variantId = $this->route('product_variant')?->id;
+
     return [
       'product_id' => ['sometimes', 'exists:products,id'],
       'size_id' => ['sometimes', 'exists:sizes,id'],
@@ -29,9 +32,16 @@ class UpdateProductVariantRequest extends FormRequest
       'discount' => ['sometimes', 'numeric', 'min:0'],
       'stock_quantity' => ['sometimes', 'integer', 'min:0'],
 
-      'barcode' => ['sometimes', 'string', 'unique:product_variants,barcode'],
-      'sku' => ['sometimes', 'string', 'unique:product_variants,sku'],
-
+      'barcode' => [
+        'sometimes',
+        'string',
+        Rule::unique('product_variants', 'barcode')->ignore($variantId)
+      ],
+      'sku' => [
+        'sometimes',
+        'string',
+        Rule::unique('product_variants', 'sku')->ignore($variantId)
+      ],
       'images' => ['nullable', 'array'],
       'images.*' => ['image', 'mimes:jpeg,png,jpg,webp', 'max:10240'], // 10MB
 
