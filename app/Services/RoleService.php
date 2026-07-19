@@ -64,6 +64,15 @@ class RoleService
 
   public function deleteRole(Role $role): bool
   {
-    return $role->delete();
+    try {
+      return $role->delete();
+    } catch (\Throwable $e) {
+      dd(
+        $e->getMessage(),
+        $e->getFile(),
+        $e->getLine(),
+        $e->getTraceAsString()
+      );
+    }
   }
 }
