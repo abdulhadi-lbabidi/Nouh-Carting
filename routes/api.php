@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CheckoutController;
+use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\MaterialController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SizeController;
@@ -102,6 +103,9 @@ Route::middleware(['setLocale', 'auth:sanctum'])->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['setLocale', 'auth:sanctum'])->group(function () {
+
+  Route::get('/dashboard/statistics', [DashboardController::class, 'index']);
+
 
   // Roles
   Route::apiResource('roles', RoleController::class);
