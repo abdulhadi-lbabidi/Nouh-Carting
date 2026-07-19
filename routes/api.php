@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WishlistController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\PermissionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -105,6 +106,8 @@ Route::middleware(['setLocale', 'auth:sanctum'])->group(function () {
 Route::middleware(['setLocale', 'auth:sanctum'])->group(function () {
 
   Route::get('/dashboard/statistics', [DashboardController::class, 'index']);
+
+  Route::get('permissions', [PermissionController::class, 'index']);
 
 
   // Roles

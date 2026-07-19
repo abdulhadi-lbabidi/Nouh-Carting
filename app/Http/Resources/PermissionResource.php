@@ -14,10 +14,12 @@ class PermissionResource extends JsonResource
    */
   public function toArray(Request $request): array
   {
+    $allLanguages = filter_var($request->query('all_languages'), FILTER_VALIDATE_BOOLEAN);
+
     return [
       'id'           => $this->id,
       'name'         => $this->name,
-      'display_name' => $this->getTranslatedDisplayNameAttribute(),
+      'display_name' => $allLanguages ? $this->display_name : $this->getTranslatedDisplayNameAttribute(),
       'guard_name'   => $this->guard_name,
     ];
   }

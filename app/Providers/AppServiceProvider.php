@@ -20,6 +20,7 @@ use App\Policies\SizePolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use App\Policies\DashboardPolicy;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -44,5 +45,7 @@ class AppServiceProvider extends ServiceProvider
     Gate::policy(Role::class, RolePolicy::class);
     Gate::policy(Size::class, SizePolicy::class);
     Gate::policy(User::class, UserPolicy::class);
+
+    Gate::define('viewStats', [DashboardPolicy::class, 'viewStats']);
   }
 }

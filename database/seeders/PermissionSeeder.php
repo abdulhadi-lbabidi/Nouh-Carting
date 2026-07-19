@@ -14,6 +14,11 @@ class PermissionSeeder extends Seeder
   public function run(): void
   {
     $resources = [
+      'dashboard' => [
+        'ar' => 'لوحة التحكم',
+        'en' => 'Dashboard',
+      ],
+
       'category' => [
         'ar' => 'الأقسام',
         'en' => 'Categories',
@@ -84,6 +89,10 @@ class PermissionSeeder extends Seeder
 
     foreach ($resources as $resource => $resourceTranslations) {
       foreach ($actions as $action => $actionTranslations) {
+
+        if ($resource === 'dashboard' && $action !== 'view') {
+          continue;
+        }
 
         $permissionName = "{$action}_{$resource}";
 
