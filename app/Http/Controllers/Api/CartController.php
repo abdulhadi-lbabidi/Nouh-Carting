@@ -18,7 +18,6 @@ class CartController extends Controller
     $cartItems = $this->cartService->getCartItems();
 
     return response()->json([
-      'success' => true,
       'data' => CartItemResource::collection($cartItems)
     ]);
   }
@@ -34,7 +33,6 @@ class CartController extends Controller
     $cartItem = $this->cartService->addToCart($validated);
 
     return response()->json([
-      'success' => true,
       'message' => 'product added to cart successfully.',
       'data' => new CartItemResource($cartItem)
     ]);
@@ -49,7 +47,6 @@ class CartController extends Controller
     $cartItem = $this->cartService->updateQuantity($id, $request->quantity);
 
     return response()->json([
-      'success' => true,
       'message' => 'product quantity updated successfully.',
       'data' => new CartItemResource($cartItem)
     ]);
@@ -61,7 +58,6 @@ class CartController extends Controller
     $this->cartService->removeItem($id);
 
     return response()->json([
-      'success' => true,
       'message' => 'product removed from cart successfully.'
     ]);
   }
@@ -72,7 +68,6 @@ class CartController extends Controller
     $this->cartService->clearCart();
 
     return response()->json([
-      'success' => true,
       'message' => 'cart cleared successfully.'
     ]);
   }

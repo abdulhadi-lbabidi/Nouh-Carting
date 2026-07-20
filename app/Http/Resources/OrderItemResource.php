@@ -17,8 +17,8 @@ class OrderItemResource extends JsonResource
       'product_name' => $this->productVariant?->product?->translated_name,
       'variant' => $this->productVariant ? [
         'id' => $this->productVariant->id,
-        'size' => $this->productVariant->size?->name,
-        'material' => $this->productVariant->material?->name,
+        'size' => $this->productVariant->size?->size,
+        'material' => $this->productVariant->material?->translated_material,
       ] : null,
     ];
   }
