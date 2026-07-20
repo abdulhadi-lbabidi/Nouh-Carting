@@ -34,6 +34,15 @@ class ProductController extends Controller
     return ProductResource::collection($featuredProducts);
   }
 
+  public function related(Request $request, Product $product)
+  {
+    $limit = $request->input('limit', 6);
+
+    $relatedProducts = $this->productService->findRelatedProducts($product, (int) $limit);
+
+    return ProductResource::collection($relatedProducts);
+  }
+
   public function store(CreateProductRequest $request)
   {
     Gate::authorize('create', Product::class);

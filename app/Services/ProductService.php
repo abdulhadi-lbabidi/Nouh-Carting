@@ -80,6 +80,23 @@ class ProductService
       ->latest()
       ->get();
   }
+
+  public function findRelatedProducts(Product $product, int $limit = 4)
+  {
+    return Product::with([
+      'category',
+      'variants.size',
+      'variants.material',
+      'variants.packages',
+      'variants.media'
+    ])
+      ->where('category_id', $product->category_id)
+      ->where('id', '!=', $product->id)
+      ->inRandomOrder()                       
+      ->limit($limit)
+      ->get();
+  }
+
   public function createProduct(array $data)
   {
     return Product::create($data);

@@ -45,6 +45,8 @@ Route::middleware(['setLocale'])->group(function () {
   Route::get('products/{product}', [ProductController::class, 'show']);
   Route::get('products-sliders', [ProductController::class, 'sliders']);
 
+  Route::get('products/{product}/related', [ProductController::class, 'related']);
+
   // Product Variants
   Route::get('product-variants', [ProductVariantController::class, 'index']);
   Route::get('product-variants/{product_variant}', [ProductVariantController::class, 'show']);
