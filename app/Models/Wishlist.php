@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['user_id', 'product_variant_id'])]
+#[Fillable(['user_id', 'product_id'])]
 class Wishlist extends Model
 {
   public function user()
@@ -13,8 +13,8 @@ class Wishlist extends Model
     return $this->belongsTo(User::class);
   }
 
-  public function productVariant()
+  public function product()
   {
-    return $this->belongsTo(ProductVariant::class, 'product_variant_id');
+    return $this->belongsTo(Product::class, 'product_id');
   }
 }

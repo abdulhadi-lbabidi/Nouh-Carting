@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\ProductVariant;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -16,8 +16,8 @@ return new class extends Migration
     Schema::create('wishlists', function (Blueprint $table) {
       $table->id();
       $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
-      $table->foreignIdFor(ProductVariant::class)->constrained()->cascadeOnDelete();
-      $table->unique(['user_id', 'product_variant_id']);
+      $table->foreignIdFor(Product::class)->constrained()->cascadeOnDelete();
+      $table->unique(['user_id', 'product_id']);
       $table->timestamps();
     });
   }

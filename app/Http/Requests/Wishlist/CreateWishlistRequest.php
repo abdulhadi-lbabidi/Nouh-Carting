@@ -24,9 +24,9 @@ class CreateWishlistRequest extends FormRequest
   public function rules(): array
   {
     return [
-      'product_variant_id' => [
+      'product_id' => [
         'required',
-        'exists:product_variants,id',
+        'exists:products,id',
         Rule::unique('wishlists')->where(function ($query) {
           return $query->where('user_id', auth()->id());
         }),

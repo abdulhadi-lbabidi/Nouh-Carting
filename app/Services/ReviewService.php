@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Models\Review;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class ReviewService
 {
@@ -14,7 +16,15 @@ class ReviewService
     $page = 1,
     $columns = ["*"]
   ): LengthAwarePaginator|Collection {
-    $query = Review::with(['user', 'productVariant']);
+
+    $filters = [
+      AllowedFilter::exact('product_variant_id'),
+    ];
+
+    $query = QueryBuilder::for(Review::class)
+      ->with(['user', 'productVariant.media'])
+      ->allowedFilters(...$filters)
+      ->defaultSort('-created_at');
 
     if ($paginate) {
       return $query->paginate(perPage: $perPage, page: $page, columns: $columns);
@@ -22,7 +32,6 @@ class ReviewService
 
     return $query->get($columns);
   }
-
   public function findOne(Review $review): Review
   {
     return $review->load(['user', 'productVariant']);
