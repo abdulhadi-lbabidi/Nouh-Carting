@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Material;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class MaterialSeeder extends Seeder
@@ -16,26 +15,32 @@ class MaterialSeeder extends Seeder
     $materials = [
       [
         'material' => [
-          'ar' => 'شوكولاتة بلجيكية فاخرة',
-          'en' => 'Premium Belgian Chocolate',
+          'ar' => 'لحم بقري أنجوس صافي',
+          'en' => 'Pure Angus Beef',
         ]
       ],
       [
         'material' => [
-          'ar' => 'طحين بر عضوي كامل',
-          'en' => 'Organic Whole Wheat Flour',
+          'ar' => 'خلطة بهارات حارة (سبايسي)',
+          'en' => 'Spicy Seasoning Blend',
         ]
       ],
       [
         'material' => [
-          'ar' => 'مكسرات مشكلة محمصة',
-          'en' => 'Assorted Roasted Nuts',
+          'ar' => 'صوص باربكيو مدخن',
+          'en' => 'Smoked BBQ Sauce',
         ]
       ],
       [
         'material' => [
-          'ar' => 'عجينة الزبدة الفرنسية الطبيعية',
-          'en' => 'Natural French Butter Dough',
+          'ar' => 'كريم ثوم كلاسيك وعادي',
+          'en' => 'Classic Garlic Cream',
+        ]
+      ],
+      [
+        'material' => [
+          'ar' => 'جبنة شيدر وموزاريلا ذائبة',
+          'en' => 'Melted Cheddar & Mozzarella',
         ]
       ],
     ];

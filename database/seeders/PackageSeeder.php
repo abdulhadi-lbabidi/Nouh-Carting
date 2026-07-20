@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Package;
 use App\Models\ProductVariant;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class PackageSeeder extends Seeder
@@ -14,52 +13,154 @@ class PackageSeeder extends Seeder
    */
   public function run(): void
   {
-    $breakfastPack = Package::updateOrCreate(
-      ['name->en' => 'Morning Fresh Package'],
+    // 🟢 1. إنشاء العروض الـ 6 الجديدة وأسعارها
+    $combo1 = Package::updateOrCreate(
+      ['name->en' => 'Super Charcoal Box'],
       [
         'name' => [
-          'ar' => 'باقة الصباح الطازج',
-          'en' => 'Morning Fresh Package',
+          'ar' => 'صندوق الفروج المشوي الخارق',
+          'en' => 'Super Charcoal Box',
         ],
-        'price' => 12.00,
+        'price' => 25.00,
       ]
     );
 
-    $celebrationPack = Package::updateOrCreate(
-      ['name->en' => 'Choco Lovers Package'],
+    $combo2 = Package::updateOrCreate(
+      ['name->en' => 'Crunchy Broasted Combo'],
       [
         'name' => [
-          'ar' => 'باقة عشاق الشوكولاتة',
-          'en' => 'Choco Lovers Package',
+          'ar' => 'كومبو البروستد المقرمش التوفيري',
+          'en' => 'Crunchy Broasted Combo',
         ],
-        'price' => 50.00,
+        'price' => 18.00,
       ]
     );
 
+    $combo3 = Package::updateOrCreate(
+      ['name->en' => 'Weekend Grills Feast'],
+      [
+        'name' => [
+          'ar' => 'وليمة المشويات العائلية لعطلة الأسبوع',
+          'en' => 'Weekend Grills Feast',
+        ],
+        'price' => 60.00,
+      ]
+    );
 
-    $croissantVariant = ProductVariant::join('products', 'product_variants.product_id', '=', 'products.id')
-      ->where('products.name->en', 'French Butter Croissant')
+    $combo4 = Package::updateOrCreate(
+      ['name->en' => 'Pizza & Fries Party Pack'],
+      [
+        'name' => [
+          'ar' => 'باقة الحفلات (بيتزا وبطاطا بالجبنة)',
+          'en' => 'Pizza & Fries Party Pack',
+        ],
+        'price' => 22.00,
+      ]
+    );
+
+    $combo5 = Package::updateOrCreate(
+      ['name->en' => 'Double Burger & Appetizers Meal'],
+      [
+        'name' => [
+          'ar' => 'وجبة البرجر المزدوج مع المقبلات',
+          'en' => 'Double Burger & Appetizers Meal',
+        ],
+        'price' => 15.00,
+      ]
+    );
+
+    $combo6 = Package::updateOrCreate(
+      ['name->en' => 'Royal Lamb Kabsa Feast'],
+      [
+        'name' => [
+          'ar' => 'الوليمة الملكية لكبسة لحم الغنم',
+          'en' => 'Royal Lamb Kabsa Feast',
+        ],
+        'price' => 45.00,
+      ]
+    );
+
+    $charcoalChickenVariant = ProductVariant::join('products', 'product_variants.product_id', '=', 'products.id')
+      ->where('products.name->en', 'Charcoal Grilled Chicken')
       ->select('product_variants.*')
       ->first();
 
-    $cakeVariant1Kg = ProductVariant::join('products', 'product_variants.product_id', '=', 'products.id')
-      ->join('sizes', 'product_variants.size_id', '=', 'sizes.id')
-      ->where('products.name->en', 'Premium Chocolate Cake')
-      ->where('sizes.size', '1 Kg')
+    $broastedChickenVariant = ProductVariant::join('products', 'product_variants.product_id', '=', 'products.id')
+      ->where('products.name->en', 'Crispy Broasted Chicken Meal')
       ->select('product_variants.*')
       ->first();
 
-    if ($breakfastPack && $croissantVariant) {
-      $breakfastPack->variants()->sync([
-        $croissantVariant->id => ['quantity' => 3]
+    $loadedFriesVariant = ProductVariant::join('products', 'product_variants.product_id', '=', 'products.id')
+      ->where('products.name->en', 'Loaded Cheesy Fries with Bacon')
+      ->select('product_variants.*')
+      ->first();
+
+    $bbqPizzaVariant = ProductVariant::join('products', 'product_variants.product_id', '=', 'products.id')
+      ->where('products.name->en', 'BBQ Chicken Pizza')
+      ->select('product_variants.*')
+      ->first();
+
+    $doubleBurgerVariant = ProductVariant::join('products', 'product_variants.product_id', '=', 'products.id')
+      ->where('products.name->en', 'Double Classic Cheeseburger')
+      ->select('product_variants.*')
+      ->first();
+
+    $lambKabsaVariant = ProductVariant::join('products', 'product_variants.product_id', '=', 'products.id')
+      ->where('products.name->en', 'Premium Lamb Kabsa Meal')
+      ->select('product_variants.*')
+      ->first();
+
+    $mixGrillsVariant = ProductVariant::join('products', 'product_variants.product_id', '=', 'products.id')
+      ->where('products.name->en', 'Assorted Mix Oriental Grills')
+      ->select('product_variants.*')
+      ->first();
+
+    $onionRingsVariant = ProductVariant::join('products', 'product_variants.product_id', '=', 'products.id')
+      ->where('products.name->en', 'Crispy Onion Rings')
+      ->select('product_variants.*')
+      ->first();
+
+    if ($combo1 && $charcoalChickenVariant && $loadedFriesVariant) {
+      $combo1->variants()->sync([
+        $charcoalChickenVariant->id => ['quantity' => 1],
+        $loadedFriesVariant->id     => ['quantity' => 1]
       ]);
     }
 
-    if ($celebrationPack && $cakeVariant1Kg && $croissantVariant) {
-      $celebrationPack->variants()->sync([
-        $cakeVariant1Kg->id => ['quantity' => 1],
-        $croissantVariant->id => ['quantity' => 2]
+    if ($combo2 && $broastedChickenVariant && $onionRingsVariant) {
+      $combo2->variants()->sync([
+        $broastedChickenVariant->id => ['quantity' => 1],
+        $onionRingsVariant->id      => ['quantity' => 1]
       ]);
     }
+
+    if ($combo3 && $mixGrillsVariant && $loadedFriesVariant) {
+      $combo3->variants()->sync([
+        $mixGrillsVariant->id   => ['quantity' => 3],
+        $loadedFriesVariant->id => ['quantity' => 2]
+      ]);
+    }
+
+    if ($combo4 && $bbqPizzaVariant && $loadedFriesVariant) {
+      $combo4->variants()->sync([
+        $bbqPizzaVariant->id    => ['quantity' => 1],
+        $loadedFriesVariant->id => ['quantity' => 1]
+      ]);
+    }
+
+    if ($combo5 && $doubleBurgerVariant && $onionRingsVariant) {
+      $combo5->variants()->sync([
+        $doubleBurgerVariant->id => ['quantity' => 1],
+        $onionRingsVariant->id   => ['quantity' => 1]
+      ]);
+    }
+
+    if ($combo6 && $lambKabsaVariant) {
+      $combo6->variants()->sync([
+        $lambKabsaVariant->id => ['quantity' => 1]
+      ]);
+    }
+
+    $this->command->info('6 Restaurant Packages seeded successfully!');
   }
 }

@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Size;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class SizeSeeder extends Seeder
@@ -14,6 +13,8 @@ class SizeSeeder extends Seeder
   public function run(): void
   {
     $sizes = [
+      ['size' => '1 Piece'],
+      ['size' => '4 Pieces'],
       ['size' => '250g'],
       ['size' => '500g'],
       ['size' => '1 Kg']
