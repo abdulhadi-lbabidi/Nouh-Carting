@@ -10,6 +10,7 @@ use App\Models\Checkout;
 use App\Services\CheckoutService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class CheckoutController extends Controller
 {
@@ -23,11 +24,20 @@ class CheckoutController extends Controller
     $perPage  = $request->input('per_page', 10);
     $page     = $request->input('page', 1);
 
+    $user = auth()->user();
+    $userIdFilter = null;
+
+    if ($user->hasRole('customer')) {
+      $userIdFilter = $user->id;
+    } else {
+      Gate::authorize('viewAny', Checkout::class);
+    }
+
     $checkouts = $this->checkoutService->findAll(
       paginate: $paginate,
       perPage: $perPage,
       page: $page,
-      userId: Auth::id()
+      userId: $userIdFilter
     );
 
     return CheckoutResource::collection($checkouts);
@@ -44,9 +54,7 @@ class CheckoutController extends Controller
 
   public function update(UpdateCheckoutRequest $request, Checkout $checkout)
   {
-    if ($checkout->user_id !== Auth::id()) {
-      abort(403, 'Unauthorized');
-    }
+    Gate::authorize('update', $checkout);
 
     $updated = $this->checkoutService->updateCheckout(
       $checkout,
@@ -58,17 +66,14 @@ class CheckoutController extends Controller
 
   public function show(Checkout $checkout)
   {
-    if ($checkout->user_id !== Auth::id()) {
-      abort(403, 'Unauthorized');
-    }
+    Gate::authorize('view', $checkout);
     return new CheckoutResource($checkout);
   }
 
   public function destroy(Checkout $checkout)
   {
-    if ($checkout->user_id !== Auth::id()) {
-      abort(403, 'Unauthorized');
-    }
+    Gate::authorize('delete', $checkout);
+
     $this->checkoutService->deleteCheckout($checkout);
     return response()->json(['message' => 'Checkout deleted']);
   }

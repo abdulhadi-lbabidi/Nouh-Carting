@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Permission;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class PermissionSeeder extends Seeder
@@ -68,6 +67,10 @@ class PermissionSeeder extends Seeder
         'ar' => 'الطلبات',
         'en' => 'Orders',
       ],
+      'checkout' => [
+        'ar' => 'عمليات الدفع',
+        'en' => 'Checkouts',
+      ],
     ];
 
     $actions = [
@@ -87,6 +90,7 @@ class PermissionSeeder extends Seeder
         'ar' => 'حذف',
         'en' => 'Delete',
       ],
+
     ];
 
     $guardName = 'api';

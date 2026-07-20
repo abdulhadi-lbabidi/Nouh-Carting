@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Category;
+use App\Models\Checkout;
 use App\Models\Material;
 use App\Models\Order;
 use App\Models\Package;
@@ -12,6 +13,7 @@ use App\Models\Role;
 use App\Models\Size;
 use App\Models\User;
 use App\Policies\CategoryPolicy;
+use App\Policies\CheckoutPolicy;
 use App\Policies\MaterialPolicy;
 use App\Policies\PackagePolicy;
 use App\Policies\ProductPolicy;
@@ -48,6 +50,7 @@ class AppServiceProvider extends ServiceProvider
     Gate::policy(Size::class, SizePolicy::class);
     Gate::policy(User::class, UserPolicy::class);
     Gate::policy(Order::class, OrderPolicy::class);
+    Gate::policy(Checkout::class, CheckoutPolicy::class);
 
     Gate::define('viewStats', [DashboardPolicy::class, 'viewStats']);
   }
