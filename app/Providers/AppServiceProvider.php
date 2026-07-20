@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Category;
 use App\Models\Material;
+use App\Models\Order;
 use App\Models\Package;
 use App\Models\Product;
 use App\Models\ProductVariant;
@@ -21,6 +22,7 @@ use App\Policies\UserPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use App\Policies\DashboardPolicy;
+use App\Policies\OrderPolicy;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -45,6 +47,7 @@ class AppServiceProvider extends ServiceProvider
     Gate::policy(Role::class, RolePolicy::class);
     Gate::policy(Size::class, SizePolicy::class);
     Gate::policy(User::class, UserPolicy::class);
+    Gate::policy(Order::class, OrderPolicy::class);
 
     Gate::define('viewStats', [DashboardPolicy::class, 'viewStats']);
   }

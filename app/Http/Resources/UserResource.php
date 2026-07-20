@@ -19,6 +19,7 @@ class UserResource extends JsonResource
       'name'        => $this->name,
       'email'       => $this->email,
       'is_active'   => (bool) $this->is_active,
+      'cart_id'     => $this->activeCart ? $this->activeCart->id : null,
       'created_at'  => $this->created_at?->toDateTimeString(),
       'roles'       => RoleResource::collection($this->whenLoaded('roles')),
     ];

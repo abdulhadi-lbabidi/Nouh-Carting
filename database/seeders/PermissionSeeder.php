@@ -64,6 +64,10 @@ class PermissionSeeder extends Seeder
         'ar' => 'الصلاحيات',
         'en' => 'Permissions',
       ],
+      'order' => [
+        'ar' => 'الطلبات',
+        'en' => 'Orders',
+      ],
     ];
 
     $actions = [

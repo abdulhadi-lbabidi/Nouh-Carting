@@ -8,7 +8,6 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class OrderService
@@ -18,9 +17,14 @@ class OrderService
     $perPage = 10,
     $page = 1,
     $columns = ["*"],
+    $userId = null
   ): LengthAwarePaginator|Collection {
-    $query = Order::where('user_id', Auth::id())
-      ->with(['user', 'checkout', 'orderItems.productVariant.product'])->latest();
+
+    $query = Order::with(['user', 'checkout', 'orderItems.productVariant.product'])->latest();
+
+    if ($userId) {
+      $query->where('user_id', $userId);
+    }
 
     if ($paginate) {
       return $query->paginate(

@@ -38,7 +38,7 @@ class CheckoutResource extends JsonResource
       'cart' => $this->cart ? [
         'id' => $this->cart->id,
         'status' => $this->cart->status,
-        'items' => CartItemResource::collection($this->cart->items),
+        'items'  => CartItemResource::collection($this->cart->cartItems),
       ] : null,
     ];
   }

@@ -8,7 +8,7 @@ use App\Http\Requests\Checkout\UpdateCheckoutRequest;
 use App\Http\Resources\CheckoutResource;
 use App\Models\Checkout;
 use App\Services\CheckoutService;
-use Illuminate\Http\Request; 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CheckoutController extends Controller

@@ -7,8 +7,8 @@ use App\Http\Requests\Auth\CreateUserRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\UpdateProfileRequest;
 use App\Http\Resources\UserResource;
+use App\Models\User;
 use App\Services\AuthService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -18,26 +18,38 @@ class AuthController extends Controller
   ) {}
   public function register(CreateUserRequest $request)
   {
-    $result = $this->authService->registerUser($request->validated());
-    return response()->json(['token' => $result]);
+    $token = $this->authService->registerUser($request->validated());
+    $user = auth()->user() ?? User::where('email', $request->email)->first();
+    $user->loadMissing(['roles', 'activeCart']);
+    return response()->json([
+      'token'   => $token,
+      'user'    => new UserResource($user)
+    ], 201);
   }
 
   public function login(LoginRequest $request)
   {
     $token = $this->authService->loginUser($request->validated());
+
     if (!$token) {
       return response()->json([
         'message' => 'Invalid email or password',
       ], 401);
     }
-    return response()->json(["token" => $token]);
+    $user = User::where('email', $request->email)->first();
+    $user->loadMissing(['roles', 'activeCart']);
+
+    return response()->json([
+      'token'   => $token,
+      'user'    => new UserResource($user)
+    ]);
   }
 
   public function me()
   {
     $user = Auth::user();
 
-    $user->loadMissing('roles');
+    $user->loadMissing(['roles', 'activeCart']);
     return new UserResource($user);
   }
 
