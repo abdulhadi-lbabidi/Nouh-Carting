@@ -8,6 +8,7 @@ use App\Http\Resources\WishlistResource;
 use App\Models\Wishlist;
 use App\Services\WishlistService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class WishlistController extends Controller
 {
@@ -37,7 +38,7 @@ class WishlistController extends Controller
 
   public function destroy(Wishlist $wishlist)
   {
-    abort_if($wishlist->user_id !== auth()->id(), 403, 'Unauthorized action.');
+    Gate::authorize('delete', $wishlist);
 
     $this->wishlistService->removeFromWishlist($wishlist);
 

@@ -9,6 +9,7 @@ use App\Http\Resources\ReviewResource;
 use App\Models\Review;
 use App\Services\ReviewService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ReviewController extends Controller
 {
@@ -43,7 +44,7 @@ class ReviewController extends Controller
 
   public function update(Review $review, UpdateReviewRequest $request)
   {
-    abort_if($review->user_id !== auth()->id(), 403, 'Unauthorized action.');
+    Gate::authorize('update', $review);
 
     $validated = $request->validated();
     $updatedReview = $this->reviewService->updateReview($review, $validated);
@@ -53,7 +54,7 @@ class ReviewController extends Controller
 
   public function destroy(Review $review)
   {
-    abort_if($review->user_id !== auth()->id(), 403, 'Unauthorized action.');
+    Gate::authorize('delete', $review);
 
     $this->reviewService->deleteReview($review);
 

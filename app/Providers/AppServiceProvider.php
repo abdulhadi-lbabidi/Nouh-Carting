@@ -9,9 +9,11 @@ use App\Models\Order;
 use App\Models\Package;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Models\Review;
 use App\Models\Role;
 use App\Models\Size;
 use App\Models\User;
+use App\Models\Wishlist;
 use App\Policies\CategoryPolicy;
 use App\Policies\CheckoutPolicy;
 use App\Policies\MaterialPolicy;
@@ -25,6 +27,8 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use App\Policies\DashboardPolicy;
 use App\Policies\OrderPolicy;
+use App\Policies\ReviewPolicy;
+use App\Policies\WishlistPolicy;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -51,6 +55,9 @@ class AppServiceProvider extends ServiceProvider
     Gate::policy(User::class, UserPolicy::class);
     Gate::policy(Order::class, OrderPolicy::class);
     Gate::policy(Checkout::class, CheckoutPolicy::class);
+
+    Gate::policy(Review::class, ReviewPolicy::class);
+    Gate::policy(Wishlist::class, WishlistPolicy::class);
 
     Gate::define('viewStats', [DashboardPolicy::class, 'viewStats']);
   }
