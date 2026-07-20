@@ -24,7 +24,11 @@ class CategoryResource extends JsonResource
 
       'image' => $this->getFirstMediaUrl('categories', 'default') ?: null,
       'all_images' => $this->getMedia('categories')->map(function ($media) {
-        return $media->getUrl('default');
+        // return $media->getUrl('default');
+        return [
+          'id'  => $media->id,
+          'url' => $media->getUrl('default'),
+        ];
       })->values(),
 
       'created_at' => $this->created_at?->format('Y-m-d H:i:s'),

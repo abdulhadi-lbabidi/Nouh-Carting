@@ -30,7 +30,7 @@ class ProductVariantPolicy
     return $user->hasPermissionTo('create_product_variant');
   }
 
-  public function update(User $user, ProductVariant $variant): bool
+  public function update(User $user): bool
   {
     return $user->hasPermissionTo('update_product_variant');
   }

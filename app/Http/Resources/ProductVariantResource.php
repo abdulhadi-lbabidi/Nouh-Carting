@@ -17,7 +17,11 @@ class ProductVariantResource extends JsonResource
       'image' => $this->getFirstMediaUrl('variants', 'default') ?: null,
 
       'product_all_images' => $this->getMedia('variants')->map(function ($media) {
-        return $media->getUrl('default');
+        // return $media->getUrl('default');
+        return [
+          'id'  => $media->id, // 👈 هنا يكمن السر!
+          'url' => $media->getUrl('default'), // أو الرابط المخصص لديك
+        ];
       })->values(),
       'product' => $this->whenLoaded('product', function () use ($allLanguages) {
         return [
@@ -33,6 +37,10 @@ class ProductVariantResource extends JsonResource
             'image' => $this->product->category->getFirstMediaUrl('categories', 'default') ?: null,
             'all_images' => $this->product->category->getMedia('categories')->map(function ($media) {
               return $media->getUrl('default');
+              // return [
+              //   'id'  => $media->id, // 👈 هنا يكمن السر!
+              //   'url' => $media->getUrl('default'), // أو الرابط المخصص لديك
+              // ];
             })->values(),
           ] : null,
         ];

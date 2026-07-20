@@ -30,15 +30,9 @@ class ProductVariantController extends Controller
   public function store(CreateProductVariantRequest $request)
   {
     Gate::authorize('create', ProductVariant::class);
+    $variants = $this->variantService->createBulkVariants($request->validated());
 
-    $validated = $request->validated();
-
-    $variant = $this->variantService->createVariant(
-      $validated,
-      $request->file('images')
-    );
-
-    return new ProductVariantResource($variant);
+    return ProductVariantResource::collection($variants);
   }
 
   public function show(ProductVariant $product_variant)
@@ -46,21 +40,13 @@ class ProductVariantController extends Controller
     return new ProductVariantResource($this->variantService->findOne($product_variant));
   }
 
-  public function update(ProductVariant $product_variant, UpdateProductVariantRequest $request)
+  public function update(UpdateProductVariantRequest $request)
   {
-    Gate::authorize('update', $product_variant);
+    Gate::authorize('update', ProductVariant::class);
 
-    $validated = $request->validated();
-    $deletedMediaIds = $request->input('deleted_media_ids', []);
+    $updatedVariants = $this->variantService->updateBulkVariants($request->validated());
 
-    $updatedVariant = $this->variantService->updateVariant(
-      $product_variant,
-      $validated,
-      $request->file('images'),
-      $deletedMediaIds
-    );
-
-    return new ProductVariantResource($updatedVariant);
+    return ProductVariantResource::collection($updatedVariants);
   }
 
   public function destroy(ProductVariant $product_variant)

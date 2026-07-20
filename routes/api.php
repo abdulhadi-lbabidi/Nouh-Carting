@@ -124,9 +124,10 @@ Route::middleware(['setLocale', 'auth:sanctum'])->group(function () {
   Route::apiResource('products', ProductController::class)
     ->except(['index', 'show']);
 
-  // Product Variants
+  // update Product Variants
+  Route::put('product-variants/bulk-update', [ProductVariantController::class, 'update']);
   Route::apiResource('product-variants', ProductVariantController::class)
-    ->except(['index', 'show']);
+    ->except(['index', 'show', 'update']);
 
   // Product Variant Packages
   Route::apiResource('packages', PackageController::class)
