@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\ForgotPasswordController;
+use App\Http\Controllers\Api\Auth\socialAuthController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CheckoutController;
@@ -32,6 +33,11 @@ Route::get('/user', function (Request $request) {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['setLocale'])->group(function () {
+
+  // Social Auth
+  Route::get('/login-google', [socialAuthController::class, 'redirectToProvider']);
+  Route::get('/auth/google/callback', [socialAuthController::class, 'handleCallback']);
+
 
   // Auth
   Route::post('register', [AuthController::class, 'register']);
@@ -81,6 +87,7 @@ Route::middleware(['setLocale', 'auth:sanctum'])->group(function () {
   // User
   Route::get('me', [AuthController::class, 'me']);
   Route::put('profile', [AuthController::class, 'updateProfile']);
+  Route::post('logout', [AuthController::class, 'logout']);
 
   // Wishlist
   Route::get('wishlist', [WishlistController::class, 'index']);
