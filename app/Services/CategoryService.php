@@ -5,6 +5,8 @@ namespace App\Services;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use App\Models\Category;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class CategoryService
 {
@@ -14,19 +16,35 @@ class CategoryService
     $page = 1,
     $columns = ["*"],
   ): LengthAwarePaginator|Collection {
-    $query = Category::with([
-      'media',
-      'products',
-      'products.variants' => function ($q) {
-        $q->with([
-          'size',
-          'material',
-          'packages',
-        ])
-          ->withAvg('reviews', 'rating')
-          ->withCount('reviews');
-      },
-    ]);
+
+    $filters = [
+      AllowedFilter::callback('search', function ($query, $value) {
+        $query->where(function ($q) use ($value) {
+          $q->where('name->en', 'like', "%{$value}%")
+            ->orWhere('name->ar', 'like', "%{$value}%")
+            ->orWhere('description->en', 'like', "%{$value}%")
+            ->orWhere('description->ar', 'like', "%{$value}%");
+        });
+      }),
+    ];
+
+    $query = QueryBuilder::for(Category::class)
+      ->with([
+        'media',
+        'products',
+        'products.variants' => function ($q) {
+          $q->with([
+            'size',
+            'material',
+            'packages',
+          ])
+            ->withAvg('reviews', 'rating')
+            ->withCount('reviews');
+        },
+      ])
+      ->withCount('products')
+      ->allowedFilters(...$filters)
+      ->defaultSort('-created_at');
 
     if ($paginate) {
       return $query->paginate(

@@ -22,6 +22,8 @@ class CategoryResource extends JsonResource
       'name' => $allLanguages ? $this->name : $this->translated_name,
       'description' => $allLanguages ? $this->description : $this->translated_description,
 
+      'products_count' => $this->whenCounted('products'),
+
       'image' => $this->getFirstMediaUrl('categories', 'default') ?: null,
       'all_images' => $this->getMedia('categories')->map(function ($media) {
         // return $media->getUrl('default');
