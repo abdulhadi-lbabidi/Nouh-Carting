@@ -14,14 +14,17 @@ class DashboardController extends Controller
     private DashboardService $dashboardService
   ) {}
 
-  public function index(): JsonResponse
+  public function index(Request $request): JsonResponse
   {
-
     Gate::authorize('viewStats', 'dashboard');
-    $statistics = $this->dashboardService->getStatistics();
+
+    $month = $request->input('month');
+    $year = $request->input('year');
+
+    $statistics = $this->dashboardService->getStatistics($month, $year);
 
     return response()->json([
-      'data'    => $statistics
+      'data' => $statistics
     ], 200);
   }
 }

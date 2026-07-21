@@ -12,44 +12,54 @@ use Carbon\Carbon;
 
 class DashboardService
 {
-  public function getStatistics(): array
+  public function getStatistics(?int $month = null, ?int $year = null): array
   {
     $today = Carbon::today();
 
+    $applyDateFilter = function ($query, $dateColumn = 'created_at') use ($month, $year) {
+      if ($year) {
+        $query->whereYear($dateColumn, $year);
+      }
+      if ($month) {
+        $query->whereMonth($dateColumn, $month);
+      }
+    };
+
     $totalProducts = Product::count();
     $totalCategories = Category::count();
-
-    $newOrdersCount = Order::where('status', 'pending')->count();
-
-    $todayOrdersCount = Order::whereDate('created_at', $today)->count();
-
-    $totalSales = Order::where('status', 'completed')->sum('total_amount');
-
-    $topSellingProducts = OrderItem::query()
-      ->select('product_variant_id', DB::raw('SUM(quantity) as total_quantity_sold'))
-      ->with([
-        'productVariant.product',
-        'productVariant.size',
-        'productVariant.material'
-      ])
-      ->whereHas('order', function ($query) {
-        $query->where('status', 'completed');
-      })
-      ->groupBy('product_variant_id')
-      ->orderByDesc('total_quantity_sold')
-      ->take(5)
-      ->get();
-
     $lowStockVariants = ProductVariant::with(['product', 'size', 'material'])
       ->where('stock_quantity', '<=', 10)
       ->orderBy('stock_quantity', 'asc')
       ->take(5)
       ->get();
 
-    $recentOrders = Order::with(['user'])
-      ->latest()
+    $newOrdersCount = Order::where('status', 'pending')->count();
+
+    $todayOrdersCount = Order::whereDate('created_at', $today)->count();
+
+    $totalSalesQuery = Order::where('status', 'completed');
+    $applyDateFilter($totalSalesQuery);
+    $totalSales = $totalSalesQuery->sum('total_amount');
+
+    $topSellingProductsQuery = OrderItem::query()
+      ->select('product_variant_id', DB::raw('SUM(quantity) as total_quantity_sold'))
+      ->with([
+        'productVariant.product',
+        'productVariant.size',
+        'productVariant.material'
+      ])
+      ->whereHas('order', function ($query) use ($applyDateFilter) {
+        $query->where('status', 'completed');
+        $applyDateFilter($query);
+      })
+      ->groupBy('product_variant_id')
+      ->orderByDesc('total_quantity_sold')
       ->take(5)
       ->get();
+
+    $recentOrdersQuery = Order::with(['user']);
+    $applyDateFilter($recentOrdersQuery);
+    $recentOrders = $recentOrdersQuery->latest()->take(5)->get();
 
     return [
       'overview' => [
@@ -59,7 +69,7 @@ class DashboardService
         'today_orders'       => $todayOrdersCount,
         'total_sales'        => round($totalSales, 2),
       ],
-      'top_selling_products' => $topSellingProducts->map(function ($item) {
+      'top_selling_products' => $topSellingProductsQuery->map(function ($item) {
         $variant = $item->productVariant;
         return [
           'variant_id'    => $item->product_variant_id,
