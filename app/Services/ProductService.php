@@ -45,6 +45,14 @@ class ProductService
       AllowedFilter::callback('max_price', function ($query, $value) {
         $query->whereHas('variants', fn($q) => $q->where('price', '<=', $value));
       }),
+
+      AllowedFilter::callback('sku', function ($query, $value) {
+        $query->whereHas('variants', fn($q) => $q->where('sku', 'like', "%{$value}%"));
+      }),
+
+      AllowedFilter::callback('barcode', function ($query, $value) {
+        $query->whereHas('variants', fn($q) => $q->where('barcode', 'like', "%{$value}%"));
+      }),
     ];
 
     $query = QueryBuilder::for(Product::class)
@@ -92,7 +100,7 @@ class ProductService
     ])
       ->where('category_id', $product->category_id)
       ->where('id', '!=', $product->id)
-      ->inRandomOrder()                       
+      ->inRandomOrder()
       ->limit($limit)
       ->get();
   }
