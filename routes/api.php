@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CheckoutController;
+use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\MaterialController;
 use App\Http\Controllers\Api\ProductController;
@@ -34,6 +36,11 @@ Route::middleware(['setLocale'])->group(function () {
   // Auth
   Route::post('register', [AuthController::class, 'register']);
   Route::post('login', [AuthController::class, 'login']);
+
+  // Contact & Password
+  Route::post('contact-us', [ContactController::class, 'send'])->middleware('throttle:5,1');
+  Route::post('forgot-password', [ForgotPasswordController::class, 'forgotPassword']);
+  Route::post('reset-password', [ForgotPasswordController::class, 'resetPassword']);
 
   // Categories
   Route::get('categories', [CategoryController::class, 'index']);
